@@ -1,0 +1,27 @@
+
+{
+  "model": "ProtonetCNN",
+  "budget": 4000,
+  "tune_location": "/tmp/fedrecon",
+  "base_model_path_protonet": "pretrained-models/icarl/icarl-4conv_fed-recon-mini-imagenet.pt",
+  "epochs_base_train": 200,
+  "batch_size_base_train": 64,
+  "lr_base_train": 0.01,
+  "num_workers": 8,
+  "optimizer_base_train": "SGD",
+  "batch_size_base_memory": 64,
+  "base_test_batch_size": 64,
+  "epochs_update_model": 100,
+  "best_epoch_resnet18": 30,
+  "best_epoch_protonetCNN": 30,
+  "lr_update_model": 0.01,
+  "batch_size_update_model": 64,
+  "optimizer_update_model": "SGD",
+  "test_method": "softmax",
+  "temperature": 2,
+  "batch_size_merge": 64,
+  "epochs_merge": 50,
+  "lr_merge": 0.01,
+  "optimizer_merge": "SGD",
+  "old_style_merge": true
+}

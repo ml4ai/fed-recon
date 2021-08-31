@@ -1,0 +1,12 @@
+{
+  "images_path": "data/mini-imagenet/mini-imagenet/images",
+  "model_path": "pretrained-models/federated-protonet/protonet_fed-recon-mini-imagenet.pt",
+  "output_path": null,
+  "model_type": "IcaRL",
+  "sample_without_replacement": true,
+  "training_examples_per_class": 30,
+  "icarl_json_file": "configs/icarl-model-config.json",
+  "train_base_model": true
+}
+
+

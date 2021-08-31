@@ -1,0 +1,10 @@
+torch
+torchvision
+scikit-learn
+pandas
+numpy
+imgaug
+imageio
+Pillow
+tqdm
+black

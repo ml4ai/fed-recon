@@ -1,0 +1,10 @@
+{
+  "images_path": "data/mini-imagenet/mini-imagenet/images",
+  "model_path":
+  "pretrained-models/federated-protonet/protonet-4conv_fed-recon-mini-imagenet.pt",
+  "model_type": "federated_protonet",
+  "sample_without_replacement": true,
+  "training_examples_per_class": 30,
+  "train_base_model": false,
+  "store_all_embeddings_in_memory": false
+}
