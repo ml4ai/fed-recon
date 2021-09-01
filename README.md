@@ -2,16 +2,16 @@
 Repository containing the Federated Reconnaissance Benchmark with a suite of model implementations for multi-client class incremental conintual learning.
 
 ## Code organization
-The top level package is `mtm` and stands for Meta-learning, Transfer, and model Merging.
-Inside `mtm.fed_recon` we define the mini-Imagenet Federated Reconnaissance Benchmark.
-Our model implementations are available at `mtm.models`.
-Single client continual learning evaluation and data sampling code is inside of `mtm.single_client`. 
+The top level package is `fed_recon`.
+Inside `fed_recon.benchmark` we define the mini-Imagenet Federated Reconnaissance Benchmark.
+Our model implementations are available at `fed_recon.models`.
+Single client continual learning evaluation and data sampling code is inside of `fed_recon.single_client`. 
 
 ## Benchmark
 To evaluate a model on the full multi-client Federated Reconnaissance Benchmark:
 
 ```bash
-python mtm/fed_recon/eval_model.py --config /path/to/config.json --use-cuda --output_path /directory/path/to/write/results/
+python fed_recon/benchmark/eval_model.py --config /path/to/config.json --use-cuda --output_path /directory/path/to/write/results/
 ```
 
 See `experiments` directory for scripts for running the benchmark with federated prototypical networks and iCaRL.
@@ -31,7 +31,7 @@ Similarly, Omniglot can be downloaded from:
 Pretrained models are available at: [https://drive.google.com/file/d/12AN_VcLJQ5rpQz1REpHatFAvFjxjUzlM/view?usp=sharing](https://drive.google.com/file/d/12AN_VcLJQ5rpQz1REpHatFAvFjxjUzlM/view?usp=sharing)
 
 ### Lower
-`mtm/models/gradient_based/lower.py`
+`fed_recon/models/gradient_based/lower.py`
 
 This model simply trains on one task using SGD and then trains on the next task.
 This method is the lower bound for incremental learning as 
@@ -39,13 +39,13 @@ the weights will be optimized for classification of last task and will not perfo
 well on previous tasks.
 
 ### iCaRL
-`mtm/models/gradient_based/icarl.py`
+`fed_recon/models/gradient_based/icarl.py`
 
 Extends the iCaRL [3] method for multi-client class-incremental continual learning.
 
 ### Federated Prototypical Networks
 
-`mtm/models/protonet/model.py`
+`fed_recon/models/protonet/model.py`
 
 Extends prototypical networks for multi-client class-incremental continual learning. We implement two prototype algorithms: one which stores all embeddings in memory and the prototypes are computed at inference time and a second more efficient method which updates prototypes estimates online.
 Our model implementations for prototypical networks reference the original implementation from [1] and a newer implementation from [6]. 
@@ -54,19 +54,19 @@ Our model implementations for prototypical networks reference the original imple
 To train a prototypical network [1] on Omniglot or mini-ImageNet, run:
 
 ```bash
-python mtm/models/protonet/train.py  <args>
+python fed_recon/models/protonet/train.py  <args>
 ```
 To evaluate the protonet on the single client class-incremental learning benchmark from [2], run:
 
 ```bash
-python mtm/models/protonet/eval_cil.py <args>
+python fed_recon/models/protonet/eval_cil.py <args>
 ```
 
 See `train.py` and `eval_cil.py` for the available arguments. In particular, you will need to pass in `--dataset {omniglot or mini-imagenet}` and `--data-dir {/path/to/uncompressed/data}`
 
 
 ### Upper
-`mtm/models/gradient_based/upper.py`
+`fed_recon/models/gradient_based/upper.py`
 
 This model trains on all data that has been seen by all clients and represents an empirical upper bound of a neural network architecture given an ever growing dataset that is trained from scratch any time any amount of new data is observed.
 

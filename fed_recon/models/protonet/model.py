@@ -154,59 +154,8 @@ class FederatedProtoNet(nn.Module):
         :param config: dictionary of hyperparameters for meta pretraining
         :return: None
         """
-        raise NotImplementedError(f"todo: implement training here")
-
-    # FIXME: implement these methods so that we can merge the 3 model classes into 1
-    # def evaluate(
-    #     self,
-    #     train_inputs,
-    #     train_labels,
-    #     test_inputs,
-    #     test_labels,
-    #     n_train_classes: int,
-    #     k_shots: int,
-    # ) -> torch.FloatTensor:
-    #     """Computes the mean accuracy of predictions on test_inputs."""
-    #     train_embeddings = self.forward(train_inputs)
-    #     test_embeddings = self.forward(test_inputs)
-    #     all_class_prototypes = self._get_prototypes(train_embeddings, train_labels, n_train_classes, k_shots)
-    #     if self.distance_function == "euclidean":
-    #         mahala = False
-    #     elif self.distance_function == "mahalanobis":
-    #         mahala = True
-    #     else:
-    #         raise NotImplementedError(f"Distance function must be in {self.supported_distance_functions} but is {self.distance_function}")
-    #
-    #     acc = get_protonet_accuracy(all_class_prototypes, test_embeddings, test_labels, mahala=mahala)
-    #     return acc
-    #
-    # def _get_prototypes(self, train_embeddings: torch.Tensor, train_labels: torch.Tensor, n_train_classes: int, k_shots: int):
-    #     new_prototypes = get_prototypes(
-    #         train_embeddings, n_train_classes, k_shots
-    #     )  # -> [b, n, features]
-    #
-    #     # Add each prototype to the model:
-    #     assert len(new_prototypes.shape) == 3
-    #     assert new_prototypes.shape[0] == 1
-    #     new_prototypes = new_prototypes[
-    #         0
-    #     ]  # Assume single element in batch dimension. Now [n_train_classes, features]
-    #     class_indices = np.unique(train_labels.numpy())
-    #     # class_indices = torch.unique(train_labels)
-    #     for i, cls_index in enumerate(class_indices):
-    #         self.update_prototype_for_class(
-    #             cls_index, new_prototypes[i, :], train_labels.shape[1]
-    #         )
-    #     all_class_prototypes = [
-    #         self.prototypes[key] for key in sorted(self.prototypes.keys())
-    #     ]
-    #     all_class_prototypes: torch.FloatTensor = torch.stack(
-    #         all_class_prototypes, dim=0
-    #     ).unsqueeze(
-    #         0
-    #     )  # -> [1, n, features]
-    #     return all_class_prototypes
-
+        raise NotImplementedError(f"todo: implement training here. Currently this is done by training with "
+                                  f"train.py which instantiates `PrototypicalNetwork` class and caches a pretrained model")
     @property
     def n_classes(self):
         assert len(self.label_index_map) == len(
@@ -585,8 +534,6 @@ class FederatedProtoNet(nn.Module):
                 self.prototypes[class_index] = proto
                 self.examples_per_class[class_index] = n_samples
 
-        # print("DynamicProtoNet.examples_per_class", self.examples_per_class)
-
     def _update_embeddings_for_class(self, class_index: int, embeddings: torch.Tensor):
         """
         Stores all embeddings seen thus for class `class_index`
@@ -597,7 +544,6 @@ class FederatedProtoNet(nn.Module):
         assert (
             len(embeddings.shape) == 2
         )  # Should be tensor of shape [n_examples_for_class_index, embedding_dim]
-        # embeddings = embeddings.detach().clone()
         embeddings = embeddings.detach()
         with torch.no_grad():
             try:
@@ -883,9 +829,7 @@ class PrototypicalNetworkCL(nn.Module):
         new_prototypes = new_prototypes[
             0
         ]  # Assume single element in batch dimension. Now [n_train_classes, features]
-        # class_indices = np.unique(train_labels.numpy())
         class_indices = train_labels.unique()
-        # class_indices = torch.unique(train_labels)
         for i, cls_index in enumerate(class_indices):
             self.update_prototype_for_class(
                 cls_index, new_prototypes[i, :], train_labels.shape[1]
@@ -1035,10 +979,6 @@ def prototypical_loss(
     squared_distances = torch.sum(
         (prototypes.unsqueeze(2) - embeddings.unsqueeze(1)) ** 2, dim=-1
     )
-    # squared_distances.shape
-    # torch.Size([1, 5, 25])
-    # targets.shape
-    # torch.Size([1, 25])
     if sum_loss_over_examples:
         reduction = "sum"
     else:
