@@ -1,6 +1,8 @@
 # Federated Reconnaissance
 Repository containing the Federated Reconnaissance Benchmark with a suite of model implementations for multi-client class incremental continual learning.
 
+See our paper for more details: [https://arxiv.org/abs/2109.00150](https://arxiv.org/abs/2109.00150)
+
 ## Code organization
 The top level package is `fed_recon`.
 Inside `fed_recon.benchmark` we define the mini-Imagenet Federated Reconnaissance Benchmark.
