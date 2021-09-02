@@ -1,5 +1,5 @@
 # Federated Reconnaissance
-Repository containing the Federated Reconnaissance Benchmark with a suite of model implementations for multi-client class incremental conintual learning.
+Repository containing the Federated Reconnaissance Benchmark with a suite of model implementations for multi-client class incremental continual learning.
 
 ## Code organization
 The top level package is `fed_recon`.
